@@ -20,7 +20,8 @@ interface CartContextType {
   cartCount: number;
 }
 
-const CartContext = createContext<CartContextType>({} as CartContextType);
+//                            vvvvvv-- ESTO ES LO QUE FALTA
+export const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [cart, setCart] = useState<CartItem[]>([]);
@@ -41,7 +42,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   // FUNCIÓN: Agregar al carrito
   const addToCart = (product: any, size: string) => {
     // Limpiamos el precio (quitamos el signo $ y MXN para poder sumar matemáticas)
-    const numericPrice = parseFloat(product.price.replace(/[^0-9.]/g, ''));
+    const numericPrice = Number(product.price);
 
     setCart((prevCart) => {
       // ¿Ya existe este producto con ESA misma talla?
