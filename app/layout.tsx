@@ -1,27 +1,17 @@
 import type { Metadata } from "next";
-import { Oswald, Montserrat } from "next/font/google"; // <--- Importamos las fuentes
+import { Inter, Oswald } from "next/font/google";
 import "./globals.css";
-import { CartProvider } from "@/context/CartContext";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
+import Navbar from "../components/Navbar";
+import Cart from "../components/Cart";
+import { CartProvider } from "../context/CartContext"; // Importamos la lógica del estado
 
-// Configuración de la fuente para Títulos (Fuerza)
-const oswald = Oswald({
-  subsets: ["latin"],
-  variable: "--font-oswald",
-  display: "swap",
-});
-
-// Configuración de la fuente para Textos (Lectura)
-const montserrat = Montserrat({
-  subsets: ["latin"],
-  variable: "--font-montserrat",
-  display: "swap",
-});
+// Configuración de fuentes (Google Fonts)
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
+const oswald = Oswald({ subsets: ["latin"], variable: "--font-oswald" });
 
 export const metadata: Metadata = {
   title: "PRIME FIT WEAR",
-  description: "Entrena duro, Viste mejor.",
+  description: "Ropa deportiva de alto rendimiento y estilo urbano.",
 };
 
 export default function RootLayout({
@@ -31,14 +21,25 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es">
-      <body
-        className={`${oswald.variable} ${montserrat.variable} antialiased bg-[#050505] text-white`}
-      >
+      <body className={`${inter.variable} ${oswald.variable} font-sans bg-[#050505] text-white`}>
+        
+        {/* CartProvider envuelve A TODO. 
+          Así, cualquier parte de la app (Navbar, Páginas, Botones) 
+          puede acceder al carrito.
+        */}
         <CartProvider>
+          
+          {/* El Navbar siempre visible arriba */}
           <Navbar />
+          
+          {/* El Carrito (Drawer) siempre listo para deslizarse */}
+          <Cart />
+
+          {/* Aquí se renderiza el contenido de cada página (page.tsx) */}
           {children}
-          <Footer />
+
         </CartProvider>
+        
       </body>
     </html>
   );
