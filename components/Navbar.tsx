@@ -18,15 +18,20 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 md:px-8">
         <div className="flex items-center justify-between h-20">
           
-          {/* LOGO OFICIAL (Ahora más grande y redondo) */}
-          <Link href="/" className="flex items-center hover:opacity-80 transition-opacity">
-            <img 
-              src="/logo.jpeg" 
-              alt="Prime Fit Wear" 
-              // w-14 y h-14 lo hacen más grande. rounded-full lo hace circular.
-              className="w-14 h-14 rounded-full object-cover border border-gray-800 hover:border-[#00f2ff] shadow-[0_0_10px_rgba(0,0,0,0.5)] transition-all" 
-            />
-          </Link>
+          {/* LOGO Y NOMBRE (Ambos te llevan al inicio) */}
+        <Link href="/" className="flex items-center gap-3 group cursor-pointer">
+          {/* Tu logo redondo actual (Asegúrate de que la ruta del src coincida con la tuya) */}
+          <img 
+            src="/logo.jpeg" 
+            alt="Prime Fit Wear Logo" 
+            className="w-10 h-10 md:w-12 md:h-12 rounded-full border border-gray-800 group-hover:border-[#00f2ff] group-hover:shadow-[0_0_10px_rgba(0,242,255,0.4)] transition-all"
+          />
+          
+          {/* El texto PRIME FIT WEAR */}
+          <span className="font-oswald font-bold text-lg md:text-xl uppercase italic tracking-wider text-white group-hover:text-gray-300 transition-colors hidden sm:block">
+            PRIME <span className="text-[#00f2ff] group-hover:text-white transition-colors">FIT</span> WEAR
+          </span>
+        </Link>
 
           {/* BOTÓN DEL CARRITO */}
           <button 

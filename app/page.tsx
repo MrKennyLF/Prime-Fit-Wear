@@ -5,7 +5,7 @@ import { client } from '@/sanity/lib/client';
 import ProductCard from '../components/ProductCard';
 import LatestDrops from '../components/LatestDrops';
 
-// Definimos la estructura de nuestros datos (incluyendo slug)
+// Definimos la estructura de nuestros datos
 interface Product {
   id: string;
   name: string;
@@ -31,7 +31,6 @@ export default function Home() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        // Consulta GROQ (Pedimos el slug para los links)
         const query = `*[_type == "product"]{
           "id": _id,
           name,
@@ -65,14 +64,34 @@ export default function Home() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [showFilters]);
 
-  // Listas de filtros
-  const categories = ["Todos", "Oversize", "Baggys", "Sudaderas", "Chamarra", "Shorts", "Accesorios"];
-  const genders = ["Todos", "Hombre", "Mujer", "Unisex"];
+  // --- LISTAS DE FILTROS (Objetos a prueba de fallos) ---
+  const categories = [
+    { label: "Todos", value: "Todos" },
+    { label: "Oversize", value: "oversize" },
+    { label: "Baggys", value: "baggys" },
+    { label: "Sudaderas", value: "hoodies" },
+    { label: "Chamarra", value: "chamarra" },
+    { label: "Compresión", value: "compresion" },
+    { label: "Shorts", value: "shorts" },
+    { label: "Accesorios", value: "accesorios" }
+  ];
 
-  // Lógica de filtrado
+  const genders = [
+    { label: "Todos", value: "Todos" },
+    { label: "Hombre", value: "hombre" },
+    { label: "Mujer", value: "mujer" },
+    { label: "Unisex", value: "unisex" }
+  ];
+
+  // --- LÓGICA DE FILTRADO ---
   const filteredProducts = products.filter((product) => {
-    const categoryMatch = filterCategory === "Todos" || product.category === filterCategory;
-    const genderMatch = filterGender === "Todos" || product.gender === filterGender;
+    // Si el filtro es "Todos", pasa directo. Si no, compara convirtiendo ambos a minúsculas por seguridad.
+    const categoryMatch = filterCategory === "Todos" || 
+      (product.category && product.category.toLowerCase() === filterCategory.toLowerCase());
+      
+    const genderMatch = filterGender === "Todos" || 
+      (product.gender && product.gender.toLowerCase() === filterGender.toLowerCase());
+      
     return categoryMatch && genderMatch;
   });
 
@@ -89,7 +108,6 @@ export default function Home() {
     <main className="min-h-screen bg-[#050505] pb-20">
       
       {/* SECCIÓN HERO */}
-      {/* NOTA: Usamos pt-32 para bajar el texto y que no lo tape el Navbar fijo */}
       <section className="h-[50vh] flex flex-col items-center justify-center text-center px-4 pt-32">
         <h1 className="text-6xl md:text-9xl font-oswald font-bold tracking-wide mb-4 text-white uppercase italic">
           PRIME <span className="text-[#00f2ff]">FIT</span> WEAR
@@ -122,50 +140,59 @@ export default function Home() {
         {showFilters && (
           <div className="bg-[#0a0a0a]/95 backdrop-blur-md border border-gray-800 p-6 rounded-lg mb-8 shadow-2xl animate-in slide-in-from-top-2 duration-300">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              
               {/* Categoría */}
               <div>
                 <h3 className="text-[#00f2ff] font-bold uppercase tracking-wider mb-3 text-sm font-oswald">Categoría</h3>
                 <div className="flex flex-wrap gap-2">
                   {categories.map((cat) => (
                     <button
-                      key={cat}
-                      onClick={() => setFilterCategory(cat)}
+                      key={cat.value}
+                      onClick={() => setFilterCategory(cat.value)}
                       className={`px-4 py-2 rounded text-sm transition-all font-sans ${
-                        filterCategory === cat 
+                        filterCategory === cat.value 
                           ? 'bg-[#00f2ff] text-black font-bold shadow-[0_0_10px_rgba(0,242,255,0.4)]' 
                           : 'bg-gray-900 text-gray-400 hover:text-white border border-gray-800'
                       }`}
                     >
-                      {cat}
+                      {cat.label}
                     </button>
                   ))}
                 </div>
               </div>
+
               {/* Género */}
               <div>
                 <h3 className="text-[#00f2ff] font-bold uppercase tracking-wider mb-3 text-sm font-oswald">Género</h3>
                 <div className="flex flex-wrap gap-2">
                   {genders.map((gen) => (
                     <button
-                      key={gen}
-                      onClick={() => setFilterGender(gen)}
+                      key={gen.value}
+                      onClick={() => setFilterGender(gen.value)}
                       className={`px-4 py-2 rounded text-sm transition-all font-sans ${
-                        filterGender === gen 
+                        filterGender === gen.value 
                           ? 'bg-white text-black font-bold shadow-[0_0_10px_rgba(255,255,255,0.4)]' 
                           : 'bg-gray-900 text-gray-400 hover:text-white border border-gray-800'
                       }`}
                     >
-                      {gen}
+                      {gen.label}
                     </button>
                   ))}
                 </div>
               </div>
             </div>
+
             {/* Resumen */}
             <div className="mt-6 pt-4 border-t border-gray-800 text-xs text-gray-500 flex justify-between items-center font-sans">
               <span>Mostrando {filteredProducts.length} productos</span>
               {(filterCategory !== "Todos" || filterGender !== "Todos") && (
-                <button onClick={() => {setFilterCategory("Todos"); setFilterGender("Todos");}} className="text-red-500 hover:text-red-400 hover:underline uppercase tracking-wider">
+                <button 
+                  onClick={() => {
+                    setFilterCategory("Todos"); 
+                    setFilterGender("Todos");
+                  }} 
+                  className="text-red-500 hover:text-red-400 hover:underline uppercase tracking-wider"
+                >
                   Borrar Filtros
                 </button>
               )}
@@ -185,7 +212,13 @@ export default function Home() {
         ) : (
           <div className="text-center py-20 bg-[#0a0a0a] rounded border border-dashed border-gray-800">
             <p className="text-gray-400 text-xl font-oswald">No encontramos productos con esos filtros.</p>
-            <button onClick={() => {setFilterCategory("Todos"); setFilterGender("Todos");}} className="mt-4 text-[#00f2ff] underline font-sans">
+            <button 
+              onClick={() => {
+                setFilterCategory("Todos"); 
+                setFilterGender("Todos");
+              }} 
+              className="mt-4 text-[#00f2ff] underline font-sans"
+            >
               Ver todo el catálogo
             </button>
           </div>
