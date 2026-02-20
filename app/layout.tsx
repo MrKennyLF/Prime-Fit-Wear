@@ -3,9 +3,9 @@ import { Inter, Oswald } from "next/font/google";
 import "./globals.css";
 import Navbar from "../components/Navbar";
 import Cart from "../components/Cart";
-import { CartProvider } from "../context/CartContext"; // Importamos la lógica del estado
+import Footer from "../components/Footer"; // <--- 1. Importamos el Footer
+import { CartProvider } from "../context/CartContext";
 
-// Configuración de fuentes (Google Fonts)
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const oswald = Oswald({ subsets: ["latin"], variable: "--font-oswald" });
 
@@ -21,25 +21,22 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es">
-      <body className={`${inter.variable} ${oswald.variable} font-sans bg-[#050505] text-white`}>
-        
-        {/* CartProvider envuelve A TODO. 
-          Así, cualquier parte de la app (Navbar, Páginas, Botones) 
-          puede acceder al carrito.
-        */}
+      <body className={`${inter.variable} ${oswald.variable} font-sans bg-[#050505] text-white flex flex-col min-h-screen`}>
+        {/* Agregamos 'flex flex-col min-h-screen' arriba para asegurar que el footer siempre esté abajo */}
         <CartProvider>
           
-          {/* El Navbar siempre visible arriba */}
           <Navbar />
-          
-          {/* El Carrito (Drawer) siempre listo para deslizarse */}
           <Cart />
 
-          {/* Aquí se renderiza el contenido de cada página (page.tsx) */}
-          {children}
+          {/* Envolvemos el children en un div flex-1 para empujar el footer al fondo */}
+          <main className="flex-1">
+            {children}
+          </main>
+
+          {/* 2. Colocamos el Footer al final */}
+          <Footer />
 
         </CartProvider>
-        
       </body>
     </html>
   );

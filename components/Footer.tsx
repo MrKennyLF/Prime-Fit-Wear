@@ -1,81 +1,62 @@
 import React from 'react';
+import Link from 'next/link';
 
 export default function Footer() {
   return (
-    <footer className="bg-black border-t border-gray-800 text-white py-12 mt-20">
-      <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
-        
-        {/* COLUMNA 1: Logo Redondo y Slogan */}
-        <div className="flex flex-col items-center md:items-start space-y-4">
-          {/* Logo con clase 'rounded-full' para hacerlo circular */}
-          <img 
-            src="/logo.jpeg" 
-            alt="Logo Prime Fit" 
-            className="h-20 w-20 object-cover rounded-full border-2 border-gray-800 opacity-90" 
-          />
-          <p className="text-gray-400 text-sm max-w-xs leading-relaxed">
-  Ropa deportiva de alto rendimiento diseñada para superar tus límites. 
-  <br />
-  <span className="text-[#00f2ff] font-bold uppercase tracking-widest">
-    Entrena duro, Viste mejor.
-  </span>
-</p>
-        </div>
-
-        {/* COLUMNA 2: Enlaces Rápidos */}
-        <div className="space-y-4">
-          <h3 className="text-[#00f2ff] font-bold uppercase tracking-wider text-sm">Navegación</h3>
-          <ul className="space-y-2 text-gray-400 text-sm">
-            <li><a href="/" className="hover:text-[#00f2ff] transition-colors">Inicio</a></li>
-            <li><a href="#" className="hover:text-[#00f2ff] transition-colors">Catálogo Completo</a></li>
-            <li><a href="#" className="hover:text-[#00f2ff] transition-colors">Nuevos Lanzamientos</a></li>
-          </ul>
-        </div>
-
-        {/* COLUMNA 3: Redes Sociales Oficiales */}
-        <div className="space-y-4">
-          <h3 className="text-[#00f2ff] font-bold uppercase tracking-wider text-sm">Síguenos</h3>
-          <div className="flex justify-center md:justify-start gap-4">
-            
-            {/* Instagram Oficial */}
-            <a 
-              href="https://www.instagram.com/pr1me.fw?igsh=MTZzOTFhcDh0N2JtMQ%3D%3D&utm_source=qr" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="w-10 h-10 bg-gray-900 rounded-full flex items-center justify-center hover:bg-[#E1306C] hover:text-white transition-all duration-300 border border-gray-800"
-              title="Instagram"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
-            </a>
-
-            {/* Facebook Oficial */}
-            <a 
-              href="https://www.facebook.com/share/1AJwXpRA5Y/?mibextid=wwXIfr" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="w-10 h-10 bg-gray-900 rounded-full flex items-center justify-center hover:bg-[#1877F2] hover:text-white transition-all duration-300 border border-gray-800"
-              title="Facebook"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
-            </a>
-
-            {/* TikTok (Pendiente - Placeholder) */}
-            <a 
-              href="#" 
-              className="w-10 h-10 bg-gray-900 rounded-full flex items-center justify-center hover:bg-white hover:text-black transition-all duration-300 border border-gray-800"
-              title="TikTok"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"></path></svg>
-            </a>
-
+    <footer className="bg-[#050505] border-t border-gray-800 pt-16 pb-8 mt-auto">
+      <div className="max-w-7xl mx-auto px-4 md:px-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
+          
+          {/* Columna 1: Marca (Ahora con Logo Redondo) */}
+          <div className="flex flex-col items-center md:items-start text-center md:text-left">
+            <Link href="/" className="mb-6 inline-block hover:opacity-80 transition-opacity">
+              <img 
+                src="/logo.jpeg" 
+                alt="Prime Fit Wear" 
+                // w-20 y h-20 para que sea grande y visible en el pie de página
+                className="w-20 h-20 rounded-full object-cover border-2 border-gray-800 hover:border-[#00f2ff] shadow-lg transition-all" 
+              />
+            </Link>
+            <p className="text-gray-400 font-sans text-sm max-w-xs leading-relaxed">
+              Ropa deportiva de alto rendimiento diseñada para superar tus límites. Entrena duro, viste mejor.
+            </p>
           </div>
+
+          {/* Columna 2: Enlaces Rápidos */}
+          <div className="flex flex-col items-center md:items-start text-center md:text-left">
+            <h3 className="text-white font-oswald font-bold uppercase tracking-widest mb-6">Navegación</h3>
+            <ul className="space-y-3 font-sans text-sm text-gray-400">
+              <li><Link href="/" className="hover:text-[#00f2ff] transition-colors">Inicio</Link></li>
+              <li><Link href="/" className="hover:text-[#00f2ff] transition-colors">Catálogo Completo</Link></li>
+              <li><Link href="/" className="hover:text-[#00f2ff] transition-colors">Nuevos Lanzamientos</Link></li>
+            </ul>
+          </div>
+
+          {/* Columna 3: Redes Sociales */}
+          <div className="flex flex-col items-center md:items-start text-center md:text-left">
+            <h3 className="text-white font-oswald font-bold uppercase tracking-widest mb-6">Síguenos</h3>
+            <div className="flex gap-4">
+              {/* Instagram */}
+              <a href="#" className="w-10 h-10 rounded-full border border-gray-800 flex items-center justify-center text-gray-400 hover:text-[#00f2ff] hover:border-[#00f2ff] transition-all">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                  <path d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.917 3.917 0 0 0-1.417.923A3.927 3.927 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.7.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.297.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.333 1.942.372C5.555 15.99 5.827 16 8 16s2.444-.01 3.298-.048c.851-.04 1.434-.174 1.943-.372a3.916 3.916 0 0 0 1.416-.923c.445-.445.718-.891.923-1.417.197-.509.332-1.09.372-1.942C15.99 10.445 16 10.173 16 8s-.01-2.445-.048-3.299c-.04-.851-.175-1.433-.372-1.941a3.926 3.926 0 0 0-.923-1.417A3.911 3.911 0 0 0 13.24.42c-.51-.198-1.092-.333-1.943-.372C10.443.01 10.172 0 7.998 0h.003zm-.717 1.442h.718c2.136 0 2.389.007 3.232.046.78.035 1.204.166 1.486.275.373.145.64.319.92.599.28.28.453.546.598.92.11.281.24.705.275 1.485.039.843.047 1.096.047 3.231s-.008 2.389-.047 3.232c-.035.78-.166 1.203-.275 1.485a2.47 2.47 0 0 1-.599.919c-.28.28-.546.453-.92.598-.28.11-.704.24-1.485.276-.843.038-1.096.047-3.232.047s-2.39-.009-3.233-.047c-.78-.036-1.203-.166-1.485-.276a2.478 2.478 0 0 1-.92-.598 2.48 2.48 0 0 1-.6-.92c-.109-.281-.24-.705-.275-1.485-.038-.843-.046-1.096-.046-3.233 0-2.136.008-2.388.046-3.231.036-.78.166-1.204.276-1.486.145-.373.319-.64.599-.92.28-.28.546-.453.92-.598.282-.11.705-.24 1.485-.276.738-.034 1.024-.044 2.515-.045v.002zm4.988 1.328a.96.96 0 1 0 0 1.92.96.96 0 0 0 0-1.92zm-4.27 1.122a4.109 4.109 0 1 0 0 8.217 4.109 4.109 0 0 0 0-8.217zm0 1.441a2.667 2.667 0 1 1 0 5.334 2.667 2.667 0 0 1 0-5.334z"/>
+                </svg>
+              </a>
+              {/* TikTok */}
+              <a href="#" className="w-10 h-10 rounded-full border border-gray-800 flex items-center justify-center text-gray-400 hover:text-[#00f2ff] hover:border-[#00f2ff] transition-all">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                  <path d="M9 0h1.98c.144.715.54 1.617 1.235 2.512C12.895 3.389 13.797 4 15 4v2c-1.753 0-3.07-.814-4-1.829V11a5 5 0 1 1-5-5v2a3 3 0 1 0 3 3V0Z"/>
+                </svg>
+              </a>
+            </div>
+          </div>
+
         </div>
 
-      </div>
-      
-      {/* Copyright */}
-      <div className="text-center mt-12 text-gray-600 text-xs border-t border-gray-900 pt-8">
-        © {new Date().getFullYear()} Prime Fit Wear. Todos los derechos reservados.
+        {/* Copyright */}
+        <div className="border-t border-gray-800 pt-8 mt-8 flex flex-col md:flex-row justify-between items-center text-xs text-gray-600 font-sans">
+          <p>© {new Date().getFullYear()} Prime Fit Wear. Todos los derechos reservados.</p>
+        </div>
       </div>
     </footer>
   );
