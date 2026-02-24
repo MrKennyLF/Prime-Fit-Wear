@@ -64,18 +64,21 @@ export default function Home() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [showFilters]);
 
-  // --- LISTAS DE FILTROS (Objetos a prueba de fallos) ---
+ // --- LISTAS DE FILTROS (Objetos a prueba de fallos) ---
   const categories = [
     { label: "Todos", value: "Todos" },
     { label: "Oversize", value: "oversize" },
-    { label: "Baggys", value: "baggys" },
+    { label: "Baggys", value: "baggy" },
     { label: "Sudaderas", value: "hoodies" },
     { label: "Chamarra", value: "chamarra" },
     { label: "Compresión", value: "compresion" },
+    { label: "Olimpicas", value: "olimpicas" },
     { label: "Shorts", value: "shorts" },
+    { label: "Joggers", value: "joggers" }, 
+    { label: "Faldas", value: "faldas" },       
+    { label: "Enteros", value: "enteros" },
     { label: "Accesorios", value: "accesorios" }
   ];
-
   const genders = [
     { label: "Todos", value: "Todos" },
     { label: "Hombre", value: "hombre" },

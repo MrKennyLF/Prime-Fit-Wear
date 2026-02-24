@@ -3,14 +3,14 @@ import Link from 'next/link';
 import { client } from '@/sanity/lib/client'; 
 import ProductGallery from '@/components/ProductGallery';
 import AddToCart from '@/components/AddToCart';
-// 1. Actualizamos el tipo de params para que Next.js entienda que es una Promesa
+
 export default async function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
   
-  // 2. Desenvolvemos los parámetros de forma segura antes de usarlos
+  // 1. Desenvolvemos los parámetros de forma segura antes de usarlos
   const resolvedParams = await params;
   const currentSlug = resolvedParams.slug;
   
-  // 3. Consulta a Sanity
+  // 2. Consulta a Sanity (¡AHORA INCLUYE EL VIDEO!)
   const query = `*[_type == "product" && slug.current == $slug][0]{
     _id,
     name,
@@ -18,10 +18,11 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
     price,
     description,
     "images": images[].asset->url,
-    isNew
+    isNew,
+    "videoUrl": video.asset->url
   }`;
 
-  // 4. Hacemos la petición pasándole el currentSlug que ya leímos
+  // 3. Hacemos la petición pasándole el currentSlug que ya leímos
   const product = await client.fetch(query, { slug: currentSlug });
 
   if (!product) {
@@ -51,8 +52,27 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
 
         <div className="flex flex-col md:flex-row gap-12 lg:gap-16">
           
-          {/* LADO IZQUIERDO: Galería Interactiva */}
+          {/* LADO IZQUIERDO: Video y Galería Interactiva */}
           <div className="w-full md:w-1/2">
+            
+            {/* REPRODUCTOR DE VIDEO NEÓN (Solo aparece si el producto tiene video) */}
+            {product.videoUrl && (
+              <div className="mb-6 rounded-lg overflow-hidden border border-gray-800 shadow-[0_0_15px_rgba(0,242,255,0.2)]">
+                <video 
+                  src={product.videoUrl} 
+                  controls 
+                  autoPlay 
+                  muted 
+                  loop 
+                  playsInline
+                  className="w-full h-auto object-cover"
+                >
+                  Tu navegador no soporta la etiqueta de video.
+                </video>
+              </div>
+            )}
+
+            {/* Galería de imágenes (se queda justo debajo del video) */}
             <ProductGallery images={product.images || []} />
           </div>
 
@@ -77,10 +97,10 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
               <p>{product.description}</p>
             </div>
 
-            {/* Selector de Tallas */}
+            {/* Botón de Agregar al carrito */}
             <div>
-            <AddToCart product={product} />
-              </div>
+              <AddToCart product={product} />
+            </div>
 
             <div className="mt-8 pt-8 border-t border-gray-800 text-xs text-gray-500 font-sans space-y-2">
               <p>⚡ Pagos seguros. Ropa de importación 100% original.</p>

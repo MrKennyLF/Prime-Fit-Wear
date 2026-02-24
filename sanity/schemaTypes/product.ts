@@ -39,19 +39,31 @@ export default defineType({
       of: [{ type: 'image' }],
       validation: (rule) => rule.required().min(1),
     }),
+    {
+      name: 'video',
+      title: 'Video del Producto (Opcional)',
+      type: 'file',
+      options: {
+        accept: 'video/mp4,video/webm', // Solo acepta formatos de video
+      },
+    },
     defineField({
       name: 'category',
       title: 'Categoría',
       type: 'string',
       options: {
         list: [
-          { title: 'Oversize', value: 'Oversize' },
-          { title: 'Baggys', value: 'Baggys' },
-          { title: 'Sudaderas', value: 'Sudaderas' },
-          { title: 'Chamarra', value: 'Chamarra' },
-          { title: 'Shorts', value: 'Shorts' },
-          { title: 'Olimpicas', value: 'Olimpicas' },
-          { title: 'Compresión', value: 'Compresion' },
+          { title: 'Oversize', value: 'oversize' },
+          { title: 'Baggy Pants', value: 'baggy' },
+          { title: 'Sudaderas', value: 'hoodies' },
+          { title: 'Chamarra', value: 'chamarra' },
+          { title: 'Compresión', value: 'compresion' },
+          { title: 'Olimpicas', value: 'olimpicas' },
+          { title: 'Shorts', value: 'shorts' },
+          { title: 'Accesorios', value: 'accesorios' },
+          { title: 'Joggers', value: 'joggers' },
+          { title: 'Faldas', value: 'faldas' },
+          { title: 'Enteros', value: 'enteros' },
         ],
       },
       validation: (rule) => rule.required(),
