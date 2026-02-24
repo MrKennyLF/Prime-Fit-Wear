@@ -1,98 +1,83 @@
 "use client";
 
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 
 interface ProductGalleryProps {
   images: string[];
+  videoUrl?: string; // <--- Ahora acepta el video
 }
 
-export default function ProductGallery({ images }: ProductGalleryProps) {
-  const [mainImage, setMainImage] = useState(images[0]);
+export default function ProductGallery({ images, videoUrl }: ProductGalleryProps) {
+  // 1. Unimos el video (si existe) y las imágenes en una sola lista
+  const mediaList = [];
   
-  // Referencia para controlar el contenedor de miniaturas
-  const scrollRef = useRef<HTMLDivElement>(null);
+  if (videoUrl) {
+    mediaList.push({ type: 'video', url: videoUrl });
+  }
+  
+  images.forEach((img) => {
+    mediaList.push({ type: 'image', url: img });
+  });
 
-  if (!images || images.length === 0) return null;
+  // 2. Controlamos qué miniatura está seleccionada (por defecto la 0, que será el video si hay)
+  const [selectedIndex, setSelectedIndex] = useState(0);
 
-  // Condición: ¿Hay más de 7 imágenes?
-  const showArrows = images.length > 5;
+  if (mediaList.length === 0) {
+    return <div className="w-full aspect-[4/5] bg-gray-900 rounded-lg flex items-center justify-center border border-gray-800">Sin imágenes</div>;
+  }
 
-  // Función para mover el carrusel a la izquierda o derecha
-  const scroll = (direction: 'left' | 'right') => {
-    if (scrollRef.current) {
-      const scrollAmount = 250; // Qué tanto se mueve por clic
-      scrollRef.current.scrollBy({ 
-        left: direction === 'left' ? -scrollAmount : scrollAmount, 
-        behavior: 'smooth' 
-      });
-    }
-  };
+  const currentMedia = mediaList[selectedIndex];
 
   return (
     <div className="flex flex-col gap-4">
-      {/* IMAGEN PRINCIPAL GRANDE */}
-      <div className="w-full aspect-[3/4] md:aspect-square bg-[#111] rounded-xl overflow-hidden border border-gray-800 relative">
-        <img 
-          src={mainImage} 
-          alt="Vista del producto" 
-          className="w-full h-full object-cover animate-in fade-in duration-500"
-        />
+      {/* VISOR PRINCIPAL GRANDE */}
+      <div className="w-full aspect-[4/5] bg-black rounded-lg overflow-hidden border border-gray-800 shadow-[0_0_15px_rgba(0,242,255,0.1)] relative flex items-center justify-center">
+        {currentMedia.type === 'video' ? (
+          <video
+            src={currentMedia.url}
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="w-full h-full object-contain pointer-events-none"
+          />
+        ) : (
+          <img
+            src={currentMedia.url}
+            alt="Detalle del producto"
+            className="w-full h-full object-cover"
+          />
+        )}
       </div>
 
-      {/* MINIATURAS (Solo se muestran si hay más de 1 foto) */}
-      {images.length > 1 && (
-        <div className="relative flex items-center group w-full">
-          
-          {/* BOTÓN IZQUIERDO (Solo si hay más de 7) */}
-          {showArrows && (
-            <button 
-              onClick={() => scroll('left')}
-              className="absolute left-0 z-10 bg-[#050505] border border-gray-700 text-gray-400 hover:text-[#00f2ff] hover:border-[#00f2ff] hover:shadow-[0_0_10px_rgba(0,242,255,0.3)] w-8 h-12 flex items-center justify-center transition-all opacity-80 hover:opacity-100"
-              aria-label="Anterior"
+      {/* MINIATURAS (CARRUSEL INFERIOR) */}
+      {mediaList.length > 1 && (
+        <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-[#00f2ff] scrollbar-track-gray-900">
+          {mediaList.map((media, index) => (
+            <button
+              key={index}
+              onClick={() => setSelectedIndex(index)}
+              className={`relative w-20 h-24 flex-shrink-0 rounded-md overflow-hidden border-2 transition-all duration-300 ${
+                selectedIndex === index 
+                  ? 'border-[#00f2ff] opacity-100 shadow-[0_0_10px_rgba(0,242,255,0.5)]' 
+                  : 'border-transparent opacity-50 hover:opacity-100'
+              }`}
             >
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
-              </svg>
+              {media.type === 'video' ? (
+                <>
+                  <video src={media.url} className="w-full h-full object-cover" muted playsInline />
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/40">
+                    {/* Ícono de Play para diferenciarlo de las fotos */}
+                    <svg className="w-8 h-8 text-white opacity-90" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M8 5v14l11-7z" />
+                    </svg>
+                  </div>
+                </>
+              ) : (
+                <img src={media.url} alt={`Miniatura ${index}`} className="w-full h-full object-cover" />
+              )}
             </button>
-          )}
-
-          {/* CONTENEDOR DE MINIATURAS SCROLLABLE */}
-          <div 
-            ref={scrollRef}
-            className={`flex gap-3 overflow-x-auto pb-2 scroll-smooth [&::-webkit-scrollbar]:hidden w-full ${showArrows ? 'px-10' : ''}`}
-          >
-            {images.map((img, index) => (
-              <button
-                key={index}
-                onClick={() => setMainImage(img)}
-                className={`flex-shrink-0 w-20 h-24 md:w-24 md:h-28 rounded-lg overflow-hidden border-2 transition-all duration-300 ${
-                  mainImage === img 
-                    ? 'border-[#00f2ff] opacity-100 shadow-[0_0_10px_rgba(0,242,255,0.2)]' 
-                    : 'border-transparent opacity-60 hover:opacity-100 hover:border-gray-500'
-                }`}
-              >
-                <img 
-                  src={img} 
-                  alt={`Miniatura ${index + 1}`} 
-                  className="w-full h-full object-cover"
-                />
-              </button>
-            ))}
-          </div>
-
-          {/* BOTÓN DERECHO (Solo si hay más de 7) */}
-          {showArrows && (
-            <button 
-              onClick={() => scroll('right')}
-              className="absolute right-0 z-10 bg-[#050505] border border-gray-700 text-gray-400 hover:text-[#00f2ff] hover:border-[#00f2ff] hover:shadow-[0_0_10px_rgba(0,242,255,0.3)] w-8 h-12 flex items-center justify-center transition-all opacity-80 hover:opacity-100"
-              aria-label="Siguiente"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-              </svg>
-            </button>
-          )}
-
+          ))}
         </div>
       )}
     </div>

@@ -27,6 +27,15 @@ export default defineType({
       type: 'number',
       validation: (rule) => rule.required().min(0),
     }),
+    // 👇 ¡AQUÍ ESTÁ EL NUEVO CAMPO DE STOCK! 👇
+    defineField({
+      name: 'stock',
+      title: 'Stock (Cantidad disponible)',
+      type: 'number',
+      description: '¿Cuántas piezas físicas tienes de este producto?',
+      validation: (rule) => rule.min(0).error('El stock no puede ser negativo'),
+    }),
+    // 👆 HASTA AQUÍ 👆
     defineField({
       name: 'description',
       title: 'Descripción',
