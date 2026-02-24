@@ -23,11 +23,12 @@ export default function Home() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
 
+  // Estados de Filtros y Búsqueda
   const [filterCategory, setFilterCategory] = useState("Todos");
   const [filterGender, setFilterGender] = useState("Todos");
+  const [searchTerm, setSearchTerm] = useState(""); 
   const [showFilters, setShowFilters] = useState(false);
 
-  // --- 1. CARGAR DATOS DE SANITY ---
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -55,7 +56,6 @@ export default function Home() {
     fetchProducts();
   }, []);
 
-  // --- 2. CERRAR FILTROS AL SCROLLEAR ---
   useEffect(() => {
     const handleScroll = () => {
       if (showFilters) setShowFilters(false);
@@ -64,7 +64,7 @@ export default function Home() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [showFilters]);
 
- // --- LISTAS DE FILTROS (Objetos a prueba de fallos) ---
+ // --- LISTAS DE FILTROS ---
   const categories = [
     { label: "Todos", value: "Todos" },
     { label: "Oversize", value: "oversize" },
@@ -73,6 +73,7 @@ export default function Home() {
     { label: "Chamarra", value: "chamarra" },
     { label: "Compresión", value: "compresion" },
     { label: "Olimpicas", value: "olimpicas" },
+    { label: "Tanks", value: "tanks" },
     { label: "Shorts", value: "shorts" },
     { label: "Joggers", value: "joggers" }, 
     { label: "Faldas", value: "faldas" },       
@@ -86,19 +87,21 @@ export default function Home() {
     { label: "Unisex", value: "unisex" }
   ];
 
-  // --- LÓGICA DE FILTRADO ---
   const filteredProducts = products.filter((product) => {
-    // Si el filtro es "Todos", pasa directo. Si no, compara convirtiendo ambos a minúsculas por seguridad.
     const categoryMatch = filterCategory === "Todos" || 
       (product.category && product.category.toLowerCase() === filterCategory.toLowerCase());
       
     const genderMatch = filterGender === "Todos" || 
       (product.gender && product.gender.toLowerCase() === filterGender.toLowerCase());
       
-    return categoryMatch && genderMatch;
+
+    const searchMatch = searchTerm === "" || 
+      (product.name && product.name.toLowerCase().includes(searchTerm.toLowerCase()));
+      
+    return categoryMatch && genderMatch && searchMatch;
   });
 
-  // Pantalla de carga
+
   if (loading) {
     return (
       <div className="min-h-screen bg-[#050505] flex items-center justify-center text-white font-oswald animate-pulse">
@@ -123,14 +126,36 @@ export default function Home() {
       {/* CARRUSEL DE NOVEDADES */}
       <LatestDrops products={products} />
 
-      {/* --- SECCIÓN DE FILTROS --- */}
+      {/* --- SECCIÓN DE FILTROS Y BUSCADOR --- */}
       <section className="max-w-7xl mx-auto px-4 md:px-8 mb-8 sticky top-24 z-40 mt-10">
         
-        {/* Botón para desplegar */}
-        <div className="flex justify-end mb-4">
+        {/* Barra Superior: Buscador y Botón de Filtros */}
+        <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-4">
+          
+          {/* Buscador de Texto */}
+          <div className="relative w-full sm:w-96">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-gray-500 absolute left-4 top-3.5">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+            </svg>
+            <input 
+              type="text" 
+              placeholder="Buscar marca, color, prenda..." 
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full bg-[#111] text-white px-4 py-3 pl-12 rounded border border-gray-800 focus:border-[#00f2ff] focus:outline-none focus:shadow-[0_0_15px_rgba(0,242,255,0.2)] transition-all font-sans text-sm"
+            />
+            {/* Boton 'X' para borrar la búsqueda rápido */}
+            {searchTerm && (
+              <button onClick={() => setSearchTerm("")} className="absolute right-4 top-3.5 text-gray-500 hover:text-[#00f2ff]">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+              </button>
+            )}
+          </div>
+
+          {/* Botón para desplegar */}
           <button 
             onClick={() => setShowFilters(!showFilters)}
-            className="flex items-center gap-2 bg-[#111] text-white px-6 py-3 rounded border border-gray-800 hover:border-[#00f2ff] transition-all uppercase tracking-widest text-sm font-bold font-oswald shadow-lg shadow-black/50"
+            className="w-full sm:w-auto flex items-center justify-center gap-2 bg-[#111] text-white px-6 py-3 rounded border border-gray-800 hover:border-[#00f2ff] transition-all uppercase tracking-widest text-sm font-bold font-oswald shadow-lg shadow-black/50 whitespace-nowrap"
           >
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-[#00f2ff]">
               <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75" />
@@ -188,11 +213,12 @@ export default function Home() {
             {/* Resumen */}
             <div className="mt-6 pt-4 border-t border-gray-800 text-xs text-gray-500 flex justify-between items-center font-sans">
               <span>Mostrando {filteredProducts.length} productos</span>
-              {(filterCategory !== "Todos" || filterGender !== "Todos") && (
+              {(filterCategory !== "Todos" || filterGender !== "Todos" || searchTerm !== "") && (
                 <button 
                   onClick={() => {
                     setFilterCategory("Todos"); 
                     setFilterGender("Todos");
+                    setSearchTerm("");
                   }} 
                   className="text-red-500 hover:text-red-400 hover:underline uppercase tracking-wider"
                 >
@@ -214,15 +240,16 @@ export default function Home() {
           </div>
         ) : (
           <div className="text-center py-20 bg-[#0a0a0a] rounded border border-dashed border-gray-800">
-            <p className="text-gray-400 text-xl font-oswald">No encontramos productos con esos filtros.</p>
+            <p className="text-gray-400 text-xl font-oswald mb-4">No encontramos productos con esos filtros o búsqueda.</p>
             <button 
               onClick={() => {
                 setFilterCategory("Todos"); 
                 setFilterGender("Todos");
+                setSearchTerm("");
               }} 
-              className="mt-4 text-[#00f2ff] underline font-sans"
+              className="text-[#00f2ff] underline font-sans hover:text-white transition-colors"
             >
-              Ver todo el catálogo
+              Borrar filtros y ver todo el catálogo
             </button>
           </div>
         )}

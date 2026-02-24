@@ -26,7 +26,7 @@ export default defineType({
       title: 'Precio (MXN)',
       type: 'number',
       validation: (rule) => rule.required().min(0),
-    }),
+    }), 
     // 👇 ¡AQUÍ ESTÁ EL NUEVO CAMPO DE STOCK! 👇
     defineField({
       name: 'stock',
@@ -53,7 +53,7 @@ export default defineType({
       title: 'Video del Producto (Opcional)',
       type: 'file',
       options: {
-        accept: 'video/mp4,video/webm', // Solo acepta formatos de video
+        accept: 'video/mp4,video/webm', 
       },
     },
     defineField({
@@ -68,6 +68,7 @@ export default defineType({
           { title: 'Chamarra', value: 'chamarra' },
           { title: 'Compresión', value: 'compresion' },
           { title: 'Olimpicas', value: 'olimpicas' },
+          { title: 'Tanks', value: 'tanks' },
           { title: 'Shorts', value: 'shorts' },
           { title: 'Accesorios', value: 'accesorios' },
           { title: 'Joggers', value: 'joggers' },
