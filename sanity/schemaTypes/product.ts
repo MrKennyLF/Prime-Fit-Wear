@@ -27,13 +27,42 @@ export default defineType({
       type: 'number',
       validation: (rule) => rule.required().min(0),
     }), 
-    // 👇 ¡AQUÍ ESTÁ EL NUEVO CAMPO DE STOCK! 👇
+    // 👇 NUEVO SISTEMA DE STOCK POR TALLAS 👇
     defineField({
-      name: 'stock',
-      title: 'Stock (Cantidad disponible)',
-      type: 'number',
-      description: '¿Cuántas piezas físicas tienes de este producto?',
-      validation: (rule) => rule.min(0).error('El stock no puede ser negativo'),
+      name: 'sizeStock',
+      title: 'Inventario por Tallas',
+      type: 'array',
+      description: 'Agrega las tallas disponibles y cuántas piezas hay de cada una.',
+      of: [
+        {
+          type: 'object',
+          fields: [
+            {
+              name: 'size',
+              title: 'Talla',
+              type: 'string',
+              options: {
+                list: ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'Unitalla'],
+              },
+            },
+            {
+              name: 'stock',
+              title: 'Cantidad en Stock',
+              type: 'number',
+              validation: (rule) => rule.min(0).error('El stock no puede ser negativo'),
+            },
+          ],
+          preview: {
+            select: { title: 'size', subtitle: 'stock' },
+            prepare(selection) {
+              return {
+                title: `Talla: ${selection.title}`,
+                subtitle: `En stock: ${selection.subtitle}`
+              }
+            }
+          }
+        },
+      ],
     }),
     // 👆 HASTA AQUÍ 👆
     defineField({
@@ -68,7 +97,7 @@ export default defineType({
           { title: 'Chamarra', value: 'chamarra' },
           { title: 'Compresión', value: 'compresion' },
           { title: 'Olimpicas', value: 'olimpicas' },
-          { title: 'Tanks', value: 'tanks' },
+          { title: 'Tanks', value: 'tanks' }, // <-- Aquí respetamos la categoría que agregó Carlos
           { title: 'Shorts', value: 'shorts' },
           { title: 'Accesorios', value: 'accesorios' },
           { title: 'Joggers', value: 'joggers' },

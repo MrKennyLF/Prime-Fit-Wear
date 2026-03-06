@@ -10,7 +10,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
   const resolvedParams = await params;
   const currentSlug = resolvedParams.slug;
 
-  // 2. Consulta a Sanity (¡AHORA INCLUYE EL VIDEO!)
+  // 2. Consulta a Sanity (¡AHORA INCLUYE EL INVENTARIO POR TALLAS!)
   const query = `*[_type == "product" && slug.current == $slug][0]{
     _id,
     name,
@@ -20,7 +20,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
     "images": images[].asset->url,
     isNew,
     "videoUrl": video.asset->url,
-    stock // 
+    sizeStock // <--- AQUÍ ESTÁ EL CAMBIO MÁGICO
   }`;
   // 3. Hacemos la petición pasándole el currentSlug que ya leímos
   const product = await client.fetch(query, { slug: currentSlug });
