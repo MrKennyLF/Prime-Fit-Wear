@@ -18,8 +18,7 @@ export default function AddToCart({ product }: { product: any }) {
 
   // Función para saber cuánto stock hay de una talla específica
   const getStockForSize = (talla: string) => {
-    // Si Carlos aún no llena el stock nuevo, asumimos que hay (red de seguridad)
-    if (sizeStock.length === 0) return 10; 
+    if (sizeStock.length === 0) return 10; // Red de seguridad temporal
     const found = sizeStock.find((item: any) => item.size === talla);
     return found ? found.stock : 0;
   };
@@ -29,11 +28,22 @@ export default function AddToCart({ product }: { product: any }) {
   const currentStock = selectedSize ? getStockForSize(selectedSize) : 0;
   const isSelectedSizeOutOfStock = selectedSize && currentStock <= 0;
 
-  // Tallas a mostrar (las que vienen de Sanity, o las clásicas por defecto)
   const displaySizes = sizeStock.length > 0 
     ? sizeStock.map((item: any) => item.size) 
     : ['S', 'M', 'L', 'XL'];
 
+  // --- FUNCIÓN DE WHATSAPP ---
+  const handlePreOrder = () => {
+    // Si no escogió talla, le ponemos "Cualquiera"
+    const tallaEncargo = selectedSize || 'Cualquiera';
+    const mensaje = `¡Hola! Vi que la prenda *${product.name}* (Talla: ${tallaEncargo}) está agotada en la página. ¿Deseo hacer un pedido/encargo, se puede?`;
+    
+    // Cambia el 521XXXXXXXXXX por el número real con código de país de Carlos
+    const whatsappUrl = `https://wa.me/528443828335?text=${encodeURIComponent(mensaje)}`;
+    window.open(whatsappUrl, '_blank');
+  };
+
+  // --- FUNCIÓN DE AGREGAR AL CARRITO NORMAL ---
   const handleAddToCart = () => {
     if (isTotallyOutOfStock) return;
 
@@ -58,7 +68,6 @@ export default function AddToCart({ product }: { product: any }) {
 
   return (
     <div>
-      {/* Selector de Tallas */}
       <div className="mb-10">
         <h3 className="text-white font-oswald uppercase tracking-widest text-sm mb-4">
           Selecciona tu talla {selectedSize && <span className="text-[#00f2ff]">({selectedSize})</span>}
@@ -81,7 +90,6 @@ export default function AddToCart({ product }: { product: any }) {
                       : 'border-gray-700 text-gray-300 hover:border-[#00f2ff] hover:text-[#00f2ff]'
                 }`}
               >
-                {/* Tachadura visual si no hay stock */}
                 {isThisSizeEmpty && (
                   <div className="absolute w-full h-[1px] bg-red-700 rotate-45"></div>
                 )}
@@ -91,7 +99,6 @@ export default function AddToCart({ product }: { product: any }) {
           })}
         </div>
         
-        {/* Mensajes dinámicos según la talla seleccionada */}
         {isTotallyOutOfStock ? (
           <p className="text-red-500 font-sans text-sm mt-3">Todas las tallas están agotadas.</p>
         ) : isSelectedSizeOutOfStock ? (
@@ -105,19 +112,16 @@ export default function AddToCart({ product }: { product: any }) {
 
       {/* BOTÓN PRINCIPAL */}
       <button 
-        onClick={handleAddToCart}
-        disabled={isTotallyOutOfStock || isSelectedSizeOutOfStock}
-        className={`w-full border-2 font-oswald text-xl italic tracking-wider py-4 rounded transition-all duration-300 ${
+        onClick={isTotallyOutOfStock || isSelectedSizeOutOfStock ? handlePreOrder : handleAddToCart}
+        className={`w-full border-2 font-oswald text-xl md:text-lg italic tracking-wider py-4 rounded transition-all duration-300 ${
           isTotallyOutOfStock || isSelectedSizeOutOfStock
-            ? 'bg-gray-900 border-gray-800 text-gray-600 cursor-not-allowed'
+            ? 'bg-red-950/40 border-red-800 text-red-400 hover:bg-red-900 hover:text-white' // Estilo de "Agotado/Pedir"
             : 'bg-transparent border-[#00f2ff] text-[#00f2ff] hover:bg-[#00f2ff] hover:text-black hover:shadow-[0_0_20px_rgba(0,242,255,0.4)]'
         }`}
       >
-        {isTotallyOutOfStock 
-          ? 'TOTALMENTE AGOTADO' 
-          : isSelectedSizeOutOfStock 
-            ? 'TALLA AGOTADA' 
-            : 'AGREGAR AL CARRITO'}
+        {isTotallyOutOfStock || isSelectedSizeOutOfStock 
+          ? 'AGOTADO - ¿ENCARGAR PEDIDO?' 
+          : 'AGREGAR AL CARRITO'}
       </button>
     </div>
   );
