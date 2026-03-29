@@ -16,7 +16,7 @@ export default function Cart() {
   const handleCheckout = () => {
     // AQUÍ PONES EL NÚMERO DE CARLOS (formato internacional sin +)
     // Ejemplo México: 521 + 10 dígitos -> 5218112345678
-    const phoneNumber = "528442735482"; 
+    const phoneNumber = "528443828335"; 
 
     let message = "Hola PRIME FIT, quiero pedir lo siguiente:\n\n";
 
