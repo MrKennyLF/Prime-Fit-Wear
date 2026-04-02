@@ -16,15 +16,14 @@ export default function AddToCart({ product }: { product: any }) {
   // Extraer el inventario por tallas desde Sanity
   const sizeStock = product.sizeStock || [];
 
-  // Función para saber cuánto stock hay de una talla específica
+// Función para saber cuánto stock hay de una talla específica
   const getStockForSize = (talla: string) => {
-    if (sizeStock.length === 0) return 10; // Red de seguridad temporal
+    if (sizeStock.length === 0) return 0; // <--- AHORA EL DEFECTO ES 0
     const found = sizeStock.find((item: any) => item.size === talla);
     return found ? found.stock : 0;
   };
-
-  // Validaciones del estado general
-  const isTotallyOutOfStock = sizeStock.length > 0 && sizeStock.every((item: any) => item.stock <= 0);
+// Validaciones del estado general (Si está vacío, también es agotado)
+  const isTotallyOutOfStock = sizeStock.length === 0 || sizeStock.every((item: any) => item.stock <= 0);
   const currentStock = selectedSize ? getStockForSize(selectedSize) : 0;
   const isSelectedSizeOutOfStock = selectedSize && currentStock <= 0;
 
