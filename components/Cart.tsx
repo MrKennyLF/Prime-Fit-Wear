@@ -18,7 +18,7 @@ export default function Cart() {
     // Ejemplo México: 521 + 10 dígitos -> 5218112345678
     const phoneNumber = "528443828335"; 
 
-    let message = "Hola PRIME FIT, quiero pedir lo siguiente:\n\n";
+    let message = "Hola PR1ME FIT, quiero pedir lo siguiente:\n\n";
 
     // Recorremos los productos para armar la lista
     cart.forEach((item) => {

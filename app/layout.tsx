@@ -10,7 +10,7 @@ const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const oswald = Oswald({ subsets: ["latin"], variable: "--font-oswald" });
 
 export const metadata: Metadata = {
-  title: "PRIME FIT WEAR",
+  title: "PR1ME Fit WEAR",
   description: "Ropa deportiva de alto rendimiento y estilo urbano.",
 };
 

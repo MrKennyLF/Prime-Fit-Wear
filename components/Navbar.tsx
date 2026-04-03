@@ -23,7 +23,7 @@ export default function Navbar() {
           {/* Tu logo redondo actual (Asegúrate de que la ruta del src coincida con la tuya) */}
           <img 
             src="/logo.jpeg" 
-            alt="Prime F1t Wear Logo" 
+            alt="Pr1me Fit Wear Logo" 
             className="w-10 h-10 md:w-12 md:h-12 rounded-full border border-gray-800 group-hover:border-[#00f2ff] group-hover:shadow-[0_0_10px_rgba(0,242,255,0.4)] transition-all"
           />
           

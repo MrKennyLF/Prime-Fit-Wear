@@ -12,7 +12,7 @@ export default function Footer() {
             <Link href="/" className="mb-6 inline-block hover:opacity-80 transition-opacity">
               <img 
                 src="/logo.jpeg" 
-                alt="Prime F1t Wear" 
+                alt="Pr1me Fit Wear" 
                 // w-20 y h-20 para que sea grande y visible en el pie de página
                 className="w-20 h-20 rounded-full object-cover border-2 border-gray-800 hover:border-[#00f2ff] shadow-lg transition-all" 
               />
@@ -55,7 +55,7 @@ export default function Footer() {
 
         {/* Copyright */}
         <div className="border-t border-gray-800 pt-8 mt-8 flex flex-col md:flex-row justify-between items-center text-xs text-gray-600 font-sans">
-          <p>© {new Date().getFullYear()} Prime F1t Wear. Todos los derechos reservados.</p>
+          <p>© {new Date().getFullYear()} Pr1me Fit Wear. Todos los derechos reservados.</p>
         </div>
       </div>
     </footer>
