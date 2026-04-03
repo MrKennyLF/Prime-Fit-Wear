@@ -29,7 +29,7 @@ export default function Navbar() {
           
           {/* El texto PRIME F1t WEAR */}
           <span className="font-oswald font-bold text-lg md:text-xl uppercase italic tracking-wider text-white group-hover:text-gray-300 transition-colors hidden sm:block">
-            PRIME <span className="text-[#00f2ff] group-hover:text-white transition-colors">F1t</span> WEAR
+            PR1ME <span className="text-[#00f2ff] group-hover:text-white transition-colors">Fit</span> WEAR
           </span>
         </Link>
 
