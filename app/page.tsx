@@ -116,7 +116,7 @@ export default function Home() {
       {/* SECCIÓN HERO */}
       <section className="h-[50vh] flex flex-col items-center justify-center text-center px-4 pt-32">
         <h1 className="text-6xl md:text-9xl font-oswald font-bold tracking-wide mb-4 text-white uppercase italic">
-          PRIME <span className="text-[#00f2ff]">FIT</span> WEAR
+          PRIME <span className="text-[#00f2ff]">F1T</span> WEAR
         </h1>
         <p className="text-gray-400 text-lg md:text-xl tracking-[0.3em] uppercase max-w-2xl font-sans">
           Entrena duro, Viste mejor.
